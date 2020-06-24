@@ -1,17 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './users/user.module';
+import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { MovieModule } from './movies/movie.module';
+import { MoviesModule } from './movies/movies.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UserModule,
+    TypeOrmModule.forRoot(),
+
+    UsersModule,
     AuthModule,
-    MovieModule,
+    MoviesModule,
   ],
 })
 export class AppModule {}
