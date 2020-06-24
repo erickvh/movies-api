@@ -10,6 +10,10 @@ export class UserSerializer {
   email: string;
   @Exclude()
   isActive: boolean;
+  @Exclude()
+  createdAt: Date;
+  @Exclude()
+  updatedAt: Date;
 
   constructor(partial: Partial<UserSerializer>) {
     Object.assign(this, partial);
