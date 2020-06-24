@@ -13,7 +13,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<AuthenticatedUserI | null> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<AuthenticatedUserI | null> {
     const user = await this.userRepository.findUserByUsername(username);
     if (user && this.usersService.compareHash(password, user.password)) {
       const authenticatedUser = {
