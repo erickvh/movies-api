@@ -6,7 +6,7 @@ import { TagDto } from './dto/tag.dto';
 @Controller('tags')
 export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
-  @Get('')
+  @Get()
   getTags(): Promise<Array<Tag>> {
     return this.tagsService.getTags();
   }
@@ -16,7 +16,7 @@ export class TagsController {
     return this.tagsService.getTag(id);
   }
 
-  @Post('')
+  @Post()
   createTag(@Body() tagDto: TagDto): Promise<Tag> {
     return this.tagsService.createTag(tagDto);
   }

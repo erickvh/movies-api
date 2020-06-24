@@ -1,15 +1,12 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class Tag {
+export class Rol {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ length: 128, unique: true })
   name: string;
-
-  @Column({ default: true })
-  isActive: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

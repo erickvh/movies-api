@@ -27,4 +27,11 @@ export class TagsService {
     tag.isActive = false;
     return this.tagRepository.save(tag);
   }
+
+  findOrCreateTags(tags: string[] | undefined): Promise<Array<Tag>> | [] {
+    if (!tags || tags.length === 0) {
+      return [];
+    }
+    return this.tagRepository.findOrCreateTags(tags);
+  }
 }

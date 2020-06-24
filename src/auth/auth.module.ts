@@ -7,7 +7,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Rol } from './entities/entities/roles.entity';
+import { Rol } from './entities/roles.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

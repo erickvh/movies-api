@@ -8,6 +8,7 @@ import {
   JoinTable,
   Check,
 } from 'typeorm';
+import { Tag } from 'src/tags/entities/tags.entity';
 
 @Entity()
 @Check(`"stock" >= 0`)
@@ -16,9 +17,19 @@ import {
 @Check(`"likes" >= 0`)
 export class Movie {
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  id: number;
 
-  @Column()
+  @ManyToMany(
+    () => Tag,
+    tag => tag.name,
+    {
+      eager: true,
+    },
+  )
+  @JoinTable()
+  tags: Tag[];
+
+  @Column({ unique: true })
   title: string;
 
   @Column()
