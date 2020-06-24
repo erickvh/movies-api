@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AuthenticatedUserI } from 'src/users/interfaces/user.interface';
-import { UserRepository } from 'src/users/repositories/users.repository';
+import { UsersService } from '../users/users.service';
+import { AuthenticatedUserI } from '../users/interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
 import { AccessToken } from './interfaces/auth.interface';
+import { UserRepository } from 'src/users/repositories/users.repository';
 
 @Injectable()
 export class AuthService {
@@ -13,10 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(
-    username: string,
-    password: string,
-  ): Promise<AuthenticatedUserI | null> {
+  async validateUser(username: string, password: string): Promise<AuthenticatedUserI | null> {
     const user = await this.userRepository.findUserByUsername(username);
     if (user && this.usersService.compareHash(password, user.password)) {
       const authenticatedUser = {
