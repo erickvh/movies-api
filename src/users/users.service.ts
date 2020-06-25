@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { RegisterUserDto } from 'src/auth/dto/auth.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UserRepository } from './repositories/users.repository';
 import { User } from './entities/users.entity';
 import { UpdateResult } from 'typeorm';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -11,8 +12,43 @@ export class UsersService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  async registerUser(user: RegisterUserDto): Promise<User> {
+  getHash(password: string): string {
+    return bcrypt.hashSync(password, this.saltRounds);
+  }
+
+  compareHash(password: string, hash: string): boolean {
+    return bcrypt.compareSync(password, hash);
+  }
+
+  getUsers(): Promise<Array<User>> {
+    return this.userRepository.findAll();
+  }
+
+  async getUser(id: number) {
+    const user = await this.userRepository.findUserById(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
+
+  createUser(user: CreateUserDto): Promise<User> {
     user.password = this.getHash(user.password);
+    return this.userRepository.save(user);
+  }
+
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.getUser(id);
+    const updateUser = {
+      ...user,
+      ...updateUserDto,
+    };
+    return this.userRepository.save(updateUser);
+  }
+
+  async removeUser(id: number): Promise<User> {
+    const user = await this.getUser(id);
+    user.isActive = false;
     return this.userRepository.save(user);
   }
 
@@ -22,13 +58,5 @@ export class UsersService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     return this.userRepository.update(id, { password: this.getHash(password) });
-  }
-
-  getHash(password: string): string {
-    return bcrypt.hashSync(password, this.saltRounds);
-  }
-
-  compareHash(password: string, hash: string): boolean {
-    return bcrypt.compareSync(password, hash);
   }
 }
