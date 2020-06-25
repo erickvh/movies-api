@@ -15,6 +15,13 @@ export class UserRepository extends Repository<User> {
     });
   }
 
+  findUserRole(id: number): Promise<User | undefined> {
+    return this.findOne(id, {
+      relations: ['rol'],
+      select: ['id', 'username', 'rol', 'isActive'],
+    });
+  }
+
   findUserByUsername(username: string): Promise<User | undefined> {
     return this.findOne({ where: { username } });
   }

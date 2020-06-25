@@ -1,10 +1,33 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 import { Order } from 'src/orders/entities/orders.entity';
+import { Rol } from 'src/auth/entities/roles.entity';
+import { Token } from 'src/auth/entities/tokens.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   readonly id: number;
+
+  @OneToMany(
+    () => Token,
+    token => token.user,
+  )
+  tokens: Token[];
+
+  @ManyToOne(
+    () => Rol,
+    rol => rol.users,
+    { nullable: false },
+  )
+  rol: Rol;
 
   @OneToMany(
     () => Order,

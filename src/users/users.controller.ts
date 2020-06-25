@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Order } from 'src/orders/entities/orders.entity';
 import { OrdersService } from 'src/orders/orders.service';
 import { CreateOrderDto } from 'src/orders/dto/create-order.dto';
+import { UserSerializer } from './serializers/user.serializer';
 
 @Controller('users')
 export class UsersController {
@@ -24,8 +25,8 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserSerializer> {
+    return new UserSerializer(await this.usersService.createUser(createUserDto));
   }
 
   @Put(':id')
