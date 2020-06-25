@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class ChangePaswordDto {
+export class ChangeRolDto {
   @IsNotEmpty()
   @IsString()
-  readonly password: string;
+  readonly rol: string;
 }

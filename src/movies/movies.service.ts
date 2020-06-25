@@ -9,7 +9,12 @@ import { TagsService } from 'src/tags/tags.service';
 export class MoviesService {
   constructor(private readonly movieRepository: MovieRepository, private readonly tagsService: TagsService) {}
   getMovies(): Promise<Array<Movie>> {
-    return this.movieRepository.find();
+    return this.movieRepository.find({
+      where: { isActive: true },
+      order: {
+        title: 'ASC',
+      },
+    });
   }
 
   async getMovie(id: number) {

@@ -6,6 +6,7 @@ import { User } from './entities/users.entity';
 import { UpdateResult } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { ChangeRolDto } from './dto/change-rol.dto';
 
 @Injectable()
 export class UsersService {
@@ -68,5 +69,12 @@ export class UsersService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     return this.userRepository.update(id, { password: this.getHash(password) });
+  }
+
+  async changeRol(id: number, changeRolDto: ChangeRolDto): Promise<User> {
+    const user = await this.getUser(id);
+    const rol = await this.authService.getRolByName(changeRolDto.rol);
+    user.rol = rol;
+    return this.userRepository.save(user);
   }
 }
