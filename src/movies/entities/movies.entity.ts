@@ -7,8 +7,10 @@ import {
   ManyToMany,
   JoinTable,
   Check,
+  OneToMany,
 } from 'typeorm';
 import { Tag } from 'src/tags/entities/tags.entity';
+import { OrderDetail } from 'src/orders/entities/order-details.entity';
 
 @Entity()
 @Check(`"stock" >= 0`)
@@ -18,6 +20,12 @@ import { Tag } from 'src/tags/entities/tags.entity';
 export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(
+    () => OrderDetail,
+    orderDetail => orderDetail.order,
+  )
+  orderDetails: OrderDetail[];
 
   @ManyToMany(
     () => Tag,

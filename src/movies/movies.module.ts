@@ -9,5 +9,6 @@ import { TagsModule } from 'src/tags/tags.module';
   imports: [TypeOrmModule.forFeature([MovieRepository]), TagsModule],
   controllers: [MoviesController],
   providers: [MoviesService],
+  exports: [MoviesService],
 })
 export class MoviesModule {}

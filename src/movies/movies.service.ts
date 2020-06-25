@@ -32,7 +32,7 @@ export class MoviesService {
   async updateMovie(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     const existingMovie = await this.getMovie(id);
     const movie = {
-      id,
+      ...existingMovie,
       ...updateMovieDto,
       tags: existingMovie.tags,
     };
@@ -40,6 +40,10 @@ export class MoviesService {
       const tags = await this.tagsService.findOrCreateTags(updateMovieDto.tags);
       movie.tags = tags;
     }
+    return this.movieRepository.save(movie);
+  }
+
+  saveMovie(movie: Movie): Promise<Movie> {
     return this.movieRepository.save(movie);
   }
 
