@@ -9,7 +9,12 @@ import { TagsService } from 'src/tags/tags.service';
 export class MoviesService {
   constructor(private readonly movieRepository: MovieRepository, private readonly tagsService: TagsService) {}
   getMovies(): Promise<Array<Movie>> {
-    return this.movieRepository.find();
+    return this.movieRepository.find({
+      where: { isActive: true },
+      order: {
+        title: 'ASC',
+      },
+    });
   }
 
   async getMovie(id: number) {
@@ -32,7 +37,7 @@ export class MoviesService {
   async updateMovie(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     const existingMovie = await this.getMovie(id);
     const movie = {
-      id,
+      ...existingMovie,
       ...updateMovieDto,
       tags: existingMovie.tags,
     };
@@ -40,6 +45,10 @@ export class MoviesService {
       const tags = await this.tagsService.findOrCreateTags(updateMovieDto.tags);
       movie.tags = tags;
     }
+    return this.movieRepository.save(movie);
+  }
+
+  saveMovie(movie: Movie): Promise<Movie> {
     return this.movieRepository.save(movie);
   }
 

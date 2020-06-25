@@ -1,40 +1,30 @@
-import {
-  Controller,
-  Post,
-  UseGuards,
-  Body,
-  UseInterceptors,
-  ClassSerializerInterceptor,
-} from '@nestjs/common';
+import { Controller, Post, UseGuards, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessToken } from './interfaces/auth.interface';
 import { UserParam } from 'src/auth/decorators/user.decorator';
 import { AuthenticatedUserI } from 'src/users/interfaces/user.interface';
-import { RegisterUserDto } from './dto/auth.dto';
 import { UsersService } from 'src/users/users.service';
-import { UserSerializer } from 'src/users/serializers/user.serializer';
+import { TokenParam } from './decorators/token.decorator';
+import { DeleteResult } from 'typeorm';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
-  ) {}
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Post('signUp')
-  async register(
-    @Body() registerUserDto: RegisterUserDto,
-  ): Promise<UserSerializer> {
-    return new UserSerializer(
-      await this.usersService.registerUser(registerUserDto),
-    );
-  }
+  constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
 
   @UseGuards(AuthGuard('local'))
   @Post('signIn')
-  login(@UserParam() user: AuthenticatedUserI): AccessToken {
-    return this.authService.getToken(user);
+  async login(@UserParam() user: AuthenticatedUserI): Promise<AccessToken> {
+    const validUser = await this.usersService.getUser(user.id);
+    const token = this.authService.getTokenForUser(user);
+    await this.authService.saveToken(validUser, token.accessToken);
+    return token;
+  }
+
+  @Post('signOut')
+  @HttpCode(200)
+  async logout(@TokenParam() bearerToken: string): Promise<DeleteResult> {
+    const token = await this.authService.getToken(bearerToken);
+    return this.authService.deleteToken(token);
   }
 }

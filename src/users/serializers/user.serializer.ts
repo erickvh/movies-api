@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Rol } from 'src/auth/entities/roles.entity';
 
 export class UserSerializer {
   id: number;
@@ -8,11 +9,9 @@ export class UserSerializer {
   firstName: string;
   lastName: string;
   email: string;
-  @Exclude()
+  rol: Rol;
   isActive: boolean;
-  @Exclude()
   createdAt: Date;
-  @Exclude()
   updatedAt: Date;
 
   constructor(partial: Partial<UserSerializer>) {

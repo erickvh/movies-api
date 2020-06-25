@@ -9,6 +9,9 @@ import { User } from './users/entities/users.entity';
 import { Tag } from './tags/entities/tags.entity';
 import { Movie } from './movies/entities/movies.entity';
 import { Rol } from './auth/entities/roles.entity';
+import { OrdersModule } from './orders/orders.module';
+import { Order } from './orders/entities/orders.entity';
+import { OrderDetail } from './orders/entities/order-details.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -22,7 +25,7 @@ import { Rol } from './auth/entities/roles.entity';
         database: configService.get('NAME_DB'),
         host: configService.get('HOST_DB'),
         synchronize: true,
-        entities: [User, Tag, Movie, Rol],
+        entities: [User, Tag, Movie, Rol, Order, OrderDetail],
       }),
     }),
     ConfigModule.forRoot({
@@ -32,6 +35,7 @@ import { Rol } from './auth/entities/roles.entity';
     AuthModule,
     UsersModule,
     TagsModule,
+    OrdersModule,
   ],
 })
 export class AppModule {}
