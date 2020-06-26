@@ -8,7 +8,7 @@ import { TagsService } from 'src/tags/tags.service';
 @Injectable()
 export class MoviesService {
   constructor(private readonly movieRepository: MovieRepository, private readonly tagsService: TagsService) {}
-  getMovies(): Promise<Array<Movie>> {
+  getMovies(): Promise<Movie[]> {
     return this.movieRepository.find({
       where: { isActive: true },
       order: {
@@ -17,7 +17,7 @@ export class MoviesService {
     });
   }
 
-  async getMovie(id: number) {
+  async getMovie(id: number): Promise<Movie> {
     const movie = await this.movieRepository.findById(id);
     if (!movie) {
       throw new NotFoundException(`Movie with id ${id} not found`);

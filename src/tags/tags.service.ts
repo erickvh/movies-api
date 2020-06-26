@@ -6,7 +6,7 @@ import { TagDto } from './dto/tag.dto';
 @Injectable()
 export class TagsService {
   constructor(private readonly tagRepository: TagRepository) {}
-  getTags(): Promise<Array<Tag>> {
+  getTags(): Promise<Tag[]> {
     return this.tagRepository.find();
   }
 
@@ -28,9 +28,10 @@ export class TagsService {
     return this.tagRepository.save(tag);
   }
 
-  findOrCreateTags(tags: string[] | undefined): Promise<Array<Tag>> | [] {
+  findOrCreateTags(tags: string[] | undefined): Promise<Tag[]> | Tag[] {
     if (!tags || tags.length === 0) {
-      return [];
+      const emptyTags: Tag[] = [];
+      return emptyTags;
     }
     return this.tagRepository.findOrCreateTags(tags);
   }

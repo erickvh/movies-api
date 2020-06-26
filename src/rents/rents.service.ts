@@ -34,10 +34,9 @@ export class RentsService {
   }
 
   async returnRentedMovie(rent: Rent): Promise<Rent> {
-    console.log('Service Rent', rent.rentDetails);
-    const rentDetails = rent.rentDetails.map(rent => ({
-      ...rent,
-      movieId: rent.movie.id,
+    const rentDetails = rent.rentDetails.map(rentDetail => ({
+      ...rentDetail,
+      movieId: rentDetail.movie.id,
     }));
     await this.adjustStock(rentDetails, true);
     rent.returned = true;

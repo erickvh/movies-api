@@ -12,7 +12,7 @@ import { SessionGuard } from 'src/auth/guards/session.guard';
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
   @Get()
-  getMovies(): Promise<Array<Movie>> {
+  getMovies(): Promise<Movie[]> {
     return this.moviesService.getMovies();
   }
 

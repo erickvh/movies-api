@@ -13,7 +13,7 @@ export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
   @Get()
   @Roles('admin')
-  getTags(): Promise<Array<Tag>> {
+  getTags(): Promise<Tag[]> {
     return this.tagsService.getTags();
   }
 

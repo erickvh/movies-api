@@ -7,7 +7,7 @@ export class TagRepository extends Repository<Tag> {
     return this.findOne(id);
   }
 
-  async findOrCreateTags(tags: string[]): Promise<Array<Tag>> {
+  async findOrCreateTags(tags: string[]): Promise<Tag[]> {
     const existingTags = await this.find({ name: In(tags) });
     const existingTagsName = existingTags.map(tag => tag.name);
     const notExistingTagsName = tags.filter(tag => !existingTagsName.includes(tag));

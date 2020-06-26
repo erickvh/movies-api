@@ -26,11 +26,11 @@ export class UsersService {
     return this.userRepository.findUserByUsername(username);
   }
 
-  getUsers(): Promise<Array<User>> {
+  getUsers(): Promise<User[]> {
     return this.userRepository.findAll();
   }
 
-  async getUser(id: number) {
+  async getUser(id: number): Promise<User> {
     const user = await this.userRepository.findUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -43,7 +43,7 @@ export class UsersService {
     const rol = await this.authService.getRolByName(user.rol);
     const newUser = {
       ...user,
-      rol: rol,
+      rol,
     };
     return this.userRepository.save(newUser);
   }
