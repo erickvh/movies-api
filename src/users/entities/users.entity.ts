@@ -10,6 +10,7 @@ import {
 import { Order } from 'src/orders/entities/orders.entity';
 import { Rol } from 'src/auth/entities/roles.entity';
 import { Token } from 'src/auth/entities/tokens.entity';
+import { Rent } from 'src/rents/entities/rents.entity';
 
 @Entity()
 export class User {
@@ -34,6 +35,12 @@ export class User {
     order => order.user,
   )
   orders: Order[];
+
+  @OneToMany(
+    () => Rent,
+    rent => rent.user,
+  )
+  rents: Rent[];
 
   @Column({ length: 128, unique: true })
   username: string;

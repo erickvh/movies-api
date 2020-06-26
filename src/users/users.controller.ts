@@ -14,11 +14,18 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ChangeRolDto } from './dto/change-rol.dto';
 import { SessionGuard } from 'src/auth/guards/session.guard';
+import { Rent } from 'src/rents/entities/rents.entity';
+import { RentsService } from 'src/rents/rents.service';
+import { CreateRentDto } from 'src/rents/dto/create-rent.dto';
 
 @UseGuards(AuthGuard('jwt'), SessionGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService, private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly ordersService: OrdersService,
+    private readonly rentsService: RentsService,
+  ) {}
 
   @Roles('admin')
   @Get()
@@ -79,5 +86,33 @@ export class UsersController {
   ): Promise<Order> {
     const user = await this.usersService.getUser(id);
     return this.ordersService.addOrderToUser(user, createOrderDto);
+  }
+
+  @Roles('admin', 'client')
+  @Get(':id/rents')
+  async getRentsByUser(@Param('id', new ParseIntPipe()) id: number): Promise<Rent[]> {
+    const user = await this.usersService.getUser(id);
+    return this.rentsService.getRentsByUserId(user.id);
+  }
+
+  @Roles('admin', 'client')
+  @Post(':id/rents')
+  async addRentToUser(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() createRentDto: CreateRentDto,
+  ): Promise<Rent> {
+    const user = await this.usersService.getUser(id);
+    return this.rentsService.addRentToUser(user, createRentDto);
+  }
+
+  @Roles('admin', 'client')
+  @Patch(':id/rents/:rentId/return')
+  async returnRentedMovie(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Param('rentId', new ParseIntPipe()) rentId: number,
+  ): Promise<Rent> {
+    const user = await this.usersService.getUser(id);
+    const rent = await this.rentsService.getRentByIdAndUser(rentId, user);
+    return this.rentsService.returnRentedMovie(rent);
   }
 }

@@ -12,6 +12,9 @@ import { Rol } from './auth/entities/roles.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/orders.entity';
 import { OrderDetail } from './orders/entities/order-details.entity';
+import { Rent } from './rents/entities/rents.entity';
+import { Token } from './auth/entities/tokens.entity';
+import { RentDetail } from './rents/entities/rent-details.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -25,7 +28,17 @@ import { OrderDetail } from './orders/entities/order-details.entity';
         database: configService.get('NAME_DB'),
         host: configService.get('HOST_DB'),
         synchronize: true,
-        entities: [User, Tag, Movie, Rol, Order, OrderDetail],
+        entities: [
+          User,
+          Tag,
+          Movie,
+          Rol,
+          Order,
+          OrderDetail,
+          Rent,
+          Token,
+          RentDetail,
+        ],
       }),
     }),
     ConfigModule.forRoot({

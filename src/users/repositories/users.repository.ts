@@ -23,6 +23,6 @@ export class UserRepository extends Repository<User> {
   }
 
   findUserByUsername(username: string): Promise<User | undefined> {
-    return this.findOne({ where: { username } });
+    return this.findOne({ where: { username, isActive: true } });
   }
 }

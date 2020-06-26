@@ -1,4 +1,4 @@
-import { IsNotEmpty, ValidateNested, IsArray, ArrayNotEmpty } from 'class-validator';
+import { IsNotEmpty, ValidateNested, ArrayNotEmpty } from 'class-validator';
 import { CreateOrderDetailDto } from './create-order-detail.dto';
 import { Type } from 'class-transformer';
 
